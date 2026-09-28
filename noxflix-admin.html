@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agregar título · NOXFLIX</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0C11; --bg-elev:#12151D; --bg-elev-2:#191D27; --line:#262B37;
+    --text:#F1F0EC; --text-dim:#9198A6; --gold:#E8A33D; --crimson:#D8394A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Work Sans',sans-serif;
+    margin:0; padding:24px 5vw 80px; padding-top:calc(24px + env(safe-area-inset-top));
+  }
+  h1{font-family:'Bebas Neue',sans-serif; font-size:34px; color:var(--crimson); letter-spacing:0.03em;}
+  h1 span{color:var(--text);}
+  p.lead{color:var(--text-dim); font-size:14px; max-width:640px; margin:8px 0 28px; line-height:1.6;}
+  .card{background:var(--bg-elev); border:1px solid var(--line); border-radius:8px; padding:20px; margin-bottom:20px; max-width:720px;}
+  label{display:block; font-size:12.5px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; margin-top:16px;}
+  label:first-child{margin-top:0;}
+  input[type=text], input[type=number], input[type=url], textarea, select{
+    width:100%; background:var(--bg-elev-2); border:1px solid var(--line); color:var(--text);
+    padding:10px 12px; border-radius:5px; font-size:14px; font-family:inherit;
+  }
+  textarea{resize:vertical; min-height:70px;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;}
+  @media (max-width:560px){ .row2,.row3{grid-template-columns:1fr;} }
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;}
+  .chip{position:relative;}
+  .chip input{position:absolute; opacity:0;}
+  .chip label{
+    margin:0; padding:7px 13px; border:1px solid var(--line); border-radius:16px;
+    font-size:12.5px; text-transform:none; letter-spacing:0; cursor:pointer; color:var(--text-dim);
+    background:var(--bg-elev-2);
+  }
+  .chip input:checked + label{background:var(--crimson); border-color:var(--crimson); color:#fff;}
+  .switch-row{display:flex; gap:22px; margin-top:14px; flex-wrap:wrap;}
+  .switch{display:flex; align-items:center; gap:8px;}
+  .switch label{margin:0; text-transform:none; font-size:13px; color:var(--text); cursor:pointer;}
+  .server-row{display:flex; gap:8px; margin-bottom:8px;}
+  .server-row input{flex:1;}
+  .server-row button{
+    background:var(--bg-elev-2); border:1px solid var(--line); color:var(--text-dim);
+    border-radius:5px; padding:0 12px; cursor:pointer; font-size:16px;
+  }
+  #add-server{
+    background:none; border:1px dashed var(--line); color:var(--text-dim);
+    padding:8px 14px; border-radius:5px; font-size:13px; cursor:pointer; margin-top:4px;
+  }
+  #generate{
+    background:var(--crimson); color:#fff; border:none; padding:13px 26px;
+    border-radius:6px; font-size:15px; font-weight:700; cursor:pointer; margin-top:24px;
+  }
+  #generate:active{transform:scale(0.98);}
+  #output-wrap{display:none;}
+  #output{
+    width:100%; min-height:260px; background:#05060A; border:1px solid var(--line);
+    color:#9ee6a8; font-family:ui-monospace,'SF Mono',Consolas,monospace; font-size:12.5px;
+    padding:14px; border-radius:6px; white-space:pre; overflow:auto;
+  }
+  #copy-btn{
+    background:var(--gold); color:#221704; border:none; padding:10px 20px;
+    border-radius:6px; font-weight:700; font-size:13.5px; cursor:pointer; margin-top:12px;
+  }
+  .steps{color:var(--text-dim); font-size:13px; line-height:1.7; margin-top:12px;}
+  .steps b{color:var(--text);}
+  a.back{color:var(--text-dim); font-size:13px; display:inline-block; margin-bottom:18px;}
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">← Volver al sitio</a>
+<h1>NOX<span>FLIX</span> · Agregar título</h1>
+<p class="lead">
+  Llena este formulario y al final te va a generar un bloque de código.
+  Cópialo y pégalo dentro del archivo <b>index.html</b>, buscando el texto
+  <b>const CATALOGO = [</b> y pegándolo justo debajo (arriba del primer
+  título que ya está ahí). No necesitas tocar el diseño ni el resto de la
+  página para nada, solo ese arreglo.
+</p>
+
+<div class="card">
+  <label>Título</label>
+  <input type="text" id="f-titulo" placeholder="Ej: El Abismo Rojo">
+
+  <div class="row3">
+    <div>
+      <label>Tipo</label>
+      <select id="f-tipo">
+        <option value="pelicula">Película</option>
+        <option value="serie">Serie</option>
+      </select>
+    </div>
+    <div>
+      <label>Año</label>
+      <input type="number" id="f-anio" placeholder="2026">
+    </div>
+    <div>
+      <label>Calificación (0–10)</label>
+      <input type="number" step="0.1" min="0" max="10" id="f-calif" placeholder="8.5 (deja 0 si aún no tiene)">
+    </div>
+  </div>
+
+  <label>Duración / temporadas</label>
+  <input type="text" id="f-duracion" placeholder='Ej: "1h 48m" o "2 temporadas"'>
+
+  <label>Categorías (elige una o varias)</label>
+  <div class="chips" id="chips-categorias"></div>
+
+  <label>URL del póster (vertical, formato 2:3)</label>
+  <input type="url" id="f-poster" placeholder="https://...">
+
+  <label>URL del banner (horizontal, opcional — se usa en el modal y el carrusel)</label>
+  <input type="url" id="f-banner" placeholder="https://...">
+
+  <label>Sinopsis</label>
+  <textarea id="f-sinopsis" placeholder="De qué trata..."></textarea>
+
+  <label>Reparto (separado por comas)</label>
+  <input type="text" id="f-reparto" placeholder="Actor 1, Actor 2, Actor 3">
+
+  <label>Dirección</label>
+  <input type="text" id="f-director" placeholder="Nombre del director/a">
+
+  <div class="switch-row">
+    <div class="switch">
+      <input type="checkbox" id="f-nuevo">
+      <label for="f-nuevo">Marcar como "Nuevo"</label>
+    </div>
+    <div class="switch">
+      <input type="checkbox" id="f-proximo">
+      <label for="f-proximo">Marcar como "Próximamente"</label>
+    </div>
+    <div class="switch">
+      <input type="checkbox" id="f-destacado">
+      <label for="f-destacado">Mostrar en el banner grande de arriba</label>
+    </div>
+  </div>
+
+  <label style="margin-top:22px;">Servidores / reproductores (enlaces embebibles)</label>
+  <div id="servers-list"></div>
+  <button id="add-server" type="button">+ Agregar otro servidor</button>
+
+  <div>
+    <button id="generate" type="button">Generar código</button>
+  </div>
+</div>
+
+<div class="card" id="output-wrap">
+  <label>Código generado</label>
+  <textarea id="output" readonly></textarea>
+  <button id="copy-btn" type="button">Copiar código</button>
+  <div class="steps">
+    <b>Cómo usarlo:</b><br>
+    1. Abre el archivo <b>index.html</b> en GitHub (botón del lápiz ✏️ para editar).<br>
+    2. Busca el texto <b>const CATALOGO = [</b> (usa Ctrl+F / Cmd+F).<br>
+    3. Pega este bloque justo debajo de esa línea, antes del primer título existente.<br>
+    4. Guarda los cambios ("Commit changes"). Listo, ya aparece en el sitio.
+  </div>
+</div>
+
+<script>
+  const CATS = [
+    ["accion","Acción"],["terror","Terror"],["ficcion","Ciencia Ficción"],
+    ["comedia","Comedia"],["drama","Drama"],["romance","Romance"],
+    ["animacion","Animación"],["documental","Documental"],
+    ["suspenso","Suspenso"],["fantasia","Fantasía"]
+  ];
+  const chipsCont = document.getElementById('chips-categorias');
+  chipsCont.innerHTML = CATS.map(([k,l],i) => `
+    <div class="chip">
+      <input type="checkbox" id="cat-${k}" value="${k}">
+      <label for="cat-${k}">${l}</label>
+    </div>`).join('');
+
+  const serversList = document.getElementById('servers-list');
+  function addServerRow(nombre='', url=''){
+    const row = document.createElement('div');
+    row.className = 'server-row';
+    row.innerHTML = `
+      <input type="text" class="srv-nombre" placeholder="Nombre (Ej: Servidor 1)" value="${nombre}">
+      <input type="url" class="srv-url" placeholder="URL del reproductor (embed)" value="${url}">
+      <button type="button" onclick="this.parentElement.remove()">✕</button>
+    `;
+    serversList.appendChild(row);
+  }
+  addServerRow('Servidor 1');
+  document.getElementById('add-server').addEventListener('click', () => addServerRow());
+
+  function slugify(str){
+    return str.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+  }
+
+  function esc(str){
+    return (str||'').replace(/\\/g,'\\\\').replace(/`/g,"'");
+  }
+
+  document.getElementById('generate').addEventListener('click', () => {
+    const titulo = document.getElementById('f-titulo').value.trim();
+    if(!titulo){ alert('Ponle al menos un título.'); return; }
+
+    const tipo = document.getElementById('f-tipo').value;
+    const anio = parseInt(document.getElementById('f-anio').value) || new Date().getFullYear();
+    const calif = parseFloat(document.getElementById('f-calif').value) || 0;
+    const duracion = document.getElementById('f-duracion').value.trim();
+    const poster = document.getElementById('f-poster').value.trim();
+    const banner = document.getElementById('f-banner').value.trim();
+    const sinopsis = document.getElementById('f-sinopsis').value.trim();
+    const reparto = document.getElementById('f-reparto').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const director = document.getElementById('f-director').value.trim();
+    const nuevo = document.getElementById('f-nuevo').checked;
+    const proximo = document.getElementById('f-proximo').checked;
+    const destacado = document.getElementById('f-destacado').checked;
+
+    const categorias = CATS.map(([k])=>k).filter(k => document.getElementById('cat-'+k).checked);
+    if(!categorias.length){ alert('Elige al menos una categoría.'); return; }
+
+    const servidores = [...document.querySelectorAll('.server-row')].map(row => ({
+      nombre: row.querySelector('.srv-nombre').value.trim() || 'Servidor',
+      url: row.querySelector('.srv-url').value.trim()
+    })).filter(s => s.url);
+
+    const id = slugify(titulo) + '-' + Math.floor(Math.random()*900+100);
+
+    const codigo = `  {
+    id: "${id}",
+    titulo: "${esc(titulo)}",
+    tipo: "${tipo}",
+    categorias: [${categorias.map(c=>`"${c}"`).join(', ')}],
+    anio: ${anio},
+    duracion: "${esc(duracion)}",
+    calificacion: ${calif},
+    poster: "${esc(poster)}",
+    banner: "${esc(banner)}",
+    sinopsis: "${esc(sinopsis)}",
+    reparto: [${reparto.map(r=>`"${esc(r)}"`).join(', ')}],
+    director: "${esc(director)}",
+    nuevo: ${nuevo},
+    proximamente: ${proximo},
+    destacado: ${destacado},
+    servidores: [${servidores.map(s=>`\n      { nombre: "${esc(s.nombre)}", url: "${esc(s.url)}" }`).join(',')}${servidores.length?'\n    ':''}]
+  },`;
+
+    document.getElementById('output').value = codigo;
+    document.getElementById('output-wrap').style.display = 'block';
+    document.getElementById('output-wrap').scrollIntoView({behavior:'smooth'});
+  });
+
+  document.getElementById('copy-btn').addEventListener('click', () => {
+    const out = document.getElementById('output');
+    out.select();
+    navigator.clipboard.writeText(out.value).then(() => {
+      const btn = document.getElementById('copy-btn');
+      const old = btn.textContent;
+      btn.textContent = '¡Copiado!';
+      setTimeout(()=>btn.textContent=old, 1500);
+    });
+  });
+</script>
+</body>
+</html>
